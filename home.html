@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Minh Nhật Store - Tết 2026</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+<style>
+/* ĐÈN LỒNG TREO 2 BÊN */
+.lantern-box {
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    pointer-events: none;
+    font-size: 40px;
+    animation: swing 3s ease-in-out infinite alternate;
+    transform-origin: top center;
+}
+.lantern-left { left: 20px; }
+.lantern-right { right: 20px; }
+
+@keyframes swing {
+    0% { transform: rotate(-5deg); }
+    100% { transform: rotate(5deg); }
+}
+
+/* Hiệu ứng viền vàng chạy quanh ảnh sản phẩm */
+.card:hover {
+    outline: 3px solid #FFD700;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.8) !important;
+}
+/* ===== BACKGROUND TẾT ===== */
+body{
+    background: linear-gradient(135deg,#8B0000,#B22222,#FFD700);
+    font-family: Arial, sans-serif;
+}
+
+/* ===== NAVBAR ===== */
+.navbar{
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(5px);
+}
+
+/* ===== HERO ===== */
+.hero{
+    position: relative;
+    height: 70vh;
+    background: url('https://cellphones.com.vn/sforum/wp-content/uploads/2023/01/hinh-anh-tet-25.jpg') center/cover no-repeat;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:white;
+}
+
+.hero::after{
+    content:"";
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.6);
+}
+
+.hero-content{
+    position:relative;
+    z-index:2;
+}
+
+.hero h1{
+    font-size:60px;
+    font-weight:bold;
+    color:#FFD700;
+    text-shadow:0 0 20px gold;
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow{
+    from{ text-shadow:0 0 10px gold; }
+    to{ text-shadow:0 0 30px #fff200; }
+}
+
+/* ===== DANH MỤC ===== */
+.category-section{
+    background:white;
+    padding:30px 0;
+    text-align:center;
+}
+
+.category-section .btn{
+    margin:5px;
+    border-radius:30px;
+}
+
+/* ===== CARD SẢN PHẨM ===== */
+.product-img{
+    height:250px;
+    object-fit:cover;
+}
+
+.card{
+    border:none;
+    border-radius:15px;
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-10px);
+    box-shadow:0 0 25px gold;
+}
+
+.badge-sale{
+    position:absolute;
+    top:10px;
+    left:10px;
+}
+
+/* ===== FOOTER ===== */
+footer{
+    background:#000;
+}
+
+/* ===== HIỆU ỨNG HOA RƠI ===== */
+.flower{
+    position:fixed;
+    top:-10px;
+    color:#FFD700;
+    animation: fall linear infinite;
+    z-index:9999;
+}
+
+@keyframes fall{
+    to{
+        transform:translateY(110vh);
+    }
+}
+
+</style>
+</head>
+<body>
+    <div class="side-decoration side-left" id="sideLeft"></div>
+<div class="side-decoration side-right" id="sideRight"></div>
+    <div class="lantern-box lantern-left">🏮</div>
+<div class="lantern-box lantern-right">🏮</div>
+
+<!-- NAVBAR -->
+ 
+<nav class="navbar navbar-expand-lg navbar-dark bg-black sticky-top">
+<div class="container">
+<a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
+    <img src="Gemini_Generated_Image_elrr5zelrr5zelrr.png" alt="logo" width="35" height="35" class="brand-logo">
+    Minh Nhật Store 
+</a>
+<div class="music-container">
+    <button id="music-btn" class="music-btn playing">
+        <span class="music-icon">🎵</span>
+        <span class="music-text">Nhạc chill </span>
+        <div class="wave-bars">
+            <span></span><span></span><span></span>
+        </div>
+    </button>
+    <audio id="bg-music" loop>
+        <source src="nhac trang chủ.mp3" type="audio/mpeg">
+    </audio>
+</div>
+<button class="logout-btn" onclick="logoutUser()">Thoát</button>
+<a href="bach.html" style="
+margin-left:15px;
+padding:8px 18px;
+border-radius:30px;
+background:linear-gradient(45deg,#ff0055,#ff9900);
+color:white;
+font-weight:bold;
+text-decoration:none;
+box-shadow:0 0 15px rgba(255,0,100,0.7);
+transition:0.3s;
+">
+💎 Giúp Đỡ Admin
+</a>
+
+<div class="ms-auto d-flex align-items-center">
+ <div class="theme-toggle me-3">
+    <i id="themeIcon" class="bi bi-moon-fill"></i>
+</div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">   
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com">
+
+<a href="home.html" class="btn btn-outline-light btn-sm me-2">Trang chủ</a>
+<a href="tuvan.html" class="btn btn-outline-light btn-sm me-3">Tư vấn</a>
+<a href="tracking.html" class="track-btn">Theo dõi đơn hàng</a>
+
+<div class="search-wrapper me-3">
+    <i class="bi bi-search"></i>
+    <input class="form-control" id="searchInput" type="text" placeholder="Tìm sản phẩm...">
+</div>
+
+</div>
+
+</div>
+<canvas id="rainCanvas"></canvas>
+</nav>
+<!-- HERO -->
+<section class="hero">
+<div class="hero-content">
+<h1>SALE HACK ADR IOS </h1>
+<p class="fs-4">Giảm giá cực sốc - Mua sắm thả ga</p>
+<a href="#products" class="btn btn-warning btn-lg mt-3">Mua ngay</a>
+</div>
+</section>
+
+<!-- DANH MỤC -->
+<section class="category-section">
+<button class="btn btn-danger" onclick="filterCategory('all')">Tất cả</button>
+<button class="btn btn-outline-danger" onclick="filterCategory('ios')">ios</button>
+<button class="btn btn-outline-danger" onclick="filterCategory('adr')">adr</button>
+<button class="btn btn-outline-danger" onclick="filterCategory('phukien')">Phụ kiện</button>
+</section>
+
+<!-- SẢN PHẨM -->
+<section class="py-5" id="products">
+<div class="container">
+<div class="row g-4" id="productList">
+    <div id="noProduct" style="
+display:none;
+text-align:center;
+font-size:22px;
+font-weight:bold;
+color:red;
+padding:40px;
+width:100%;
+">
+❌ Không có sản phẩm
+</div>
+
+<!-- SẢN PHẨM MẪU -->
+<div class="col-md-3 product" data-category="ios" data-name="FLourite">
+<div class="card shadow-sm position-relative">
+<span class="badge bg-danger badge-sale">-20%</span>
+<img src="image.png" class="card-img-top product-img">
+<div class="card-body text-center">
+<h6>FLourite gốc 30 ngày </h6>
+<p class="text-danger fw-bold">350.000đ</p>
+<a href="payment.html" class="btn btn-dark">Mua hàng </a>
+</div>
+</div>
+</div>
+
+
+<div class="col-md-3 product" data-category="ios" data-name="FLourite">
+<div class="card shadow-sm">
+<img src="image.png" class="card-img-top product-img">
+<div class="card-body text-center">
+<h6>FLourite gốc 15 ngày </h6>
+<p class="text-danger fw-bold">220.000đ</p>
+<a href="payment.html" class="btn btn-dark">Mua hàng</a>
+</div>
+</div>
+</div>
+
+<div class="col-md-3 product" data-category="ios" data-name="migul">
+<div class="card shadow-sm">
+<img src="photo_2026-01-20_09-16-05.jpg" class="card-img-top product-img">
+<div class="card-body text-center">
+<h6>Migul ios tháng </h6>
+<p class="text-danger fw-bold">220.000đ</p>
+<a href="payment.html" class="btn btn-dark">Đặt hàng</a>
+</div>
+</div>
+</div>
+
+<div class="col-md-3 product" data-category="ios" data-name="migul tuần">
+<div class="card shadow-sm">
+<img src="photo_2026-01-20_09-16-05.jpg" class="card-img-top product-img">
+<div class="card-body text-center">
+<h6>Migul ios tuần </h6>
+<p class="text-danger fw-bold">150.000đ</p>
+<a href="payment.html" class="btn btn-dark">Đặt hàng</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+
+<!-- JS -->
+<script>
+    function createSideEffects() {
+    const sides = [document.getElementById('sideLeft'), document.getElementById('sideRight')];
+    
+    sides.forEach(side => {
+        // Tạo đồng xu vàng 3D
+        setInterval(() => {
+            const coin = document.createElement('div');
+            coin.className = 'cyber-coin';
+            coin.innerHTML = '福'; // Chữ "Phúc" hoặc "Vip"
+            coin.style.left = Math.random() * 80 + 'px';
+            coin.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            
+            // Đổi màu Neon ngẫu nhiên cho hào quang đồng xu
+            const neonColors = ['#FFD700', '#00f2ff', '#ff0055'];
+            const color = neonColors[Math.floor(Math.random() * neonColors.length)];
+            coin.style.boxShadow = `0 0 20px ${color}`;
+            
+            side.appendChild(coin);
+            setTimeout(() => coin.remove(), 7000);
+        }, 1500);
+
+        // Tạo vạch kẻ Cyber Scan
+        setInterval(() => {
+            const line = document.createElement('div');
+            line.className = 'cyber-line';
+            line.style.left = Math.random() * 100 + 'px';
+            line.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            side.appendChild(line);
+            setTimeout(() => line.remove(), 4000);
+        }, 1000);
+    });
+}
+
+// Chạy hiệu ứng
+createSideEffects();
+    // ===== ĐẾM LƯỢT XEM =====
+if(!localStorage.getItem("viewCount")){
+    localStorage.setItem("viewCount",0);
+}
+let views = parseInt(localStorage.getItem("viewCount"));
+views++;
+localStorage.setItem("viewCount",views);
+
+const searchInput = document.getElementById("searchInput");
+const products = document.querySelectorAll(".product");
+
+searchInput.addEventListener("keyup", function(){
+
+let keyword = this.value.toLowerCase();
+let found = false;
+
+products.forEach(product => {
+
+let productName = product.querySelector("h6").innerText.toLowerCase();
+
+if(productName.includes(keyword)){
+    product.style.display = "block";
+    found = true;
+}else{
+    product.style.display = "none";
+}
+
+});
+
+if(!found){
+document.getElementById("noProduct").style.display="block";
+}else{
+document.getElementById("noProduct").style.display="none";
+}
+
+});
+
+function filterCategory(category){
+document.querySelectorAll(".product").forEach(p=>{
+if(category==="all" || p.getAttribute("data-category")===category){
+p.style.display="block";
+}else{
+p.style.display="none";
+}
+});
+}
+
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- CONTACT ICON RAINBOW PRO -->
+<style>
+    /* ===== SIDE DECORATION - VIP PRO MAX ===== */
+.side-decoration {
+    position: fixed;
+    top: 0;
+    width: 150px; /* Độ rộng vùng hiệu ứng 2 bên */
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+.side-left { left: 0; }
+.side-right { right: 0; }
+
+/* Đồng xu 3D với hào quang Neon */
+.cyber-coin {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: radial-gradient(circle, #FFD700 20%, #B8860B 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 15px #FFD700, 0 0 30px rgba(255, 215, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #8B0000;
+    font-size: 20px;
+    border: 2px solid #FFF200;
+    animation: float3D 6s linear infinite;
+    opacity: 0.8;
+}
+
+/* Hiệu ứng vạch kẻ Cyber chạy dọc */
+.cyber-line {
+    position: absolute;
+    width: 2px;
+    height: 100px;
+    background: linear-gradient(to bottom, transparent, #00f2ff, transparent);
+    animation: cyberScan 4s linear infinite;
+    filter: drop-shadow(0 0 8px #00f2ff);
+}
+
+@keyframes float3D {
+    0% { transform: translateY(110vh) rotateY(0deg) rotateX(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-10vh) rotateY(360deg) rotateX(180deg); opacity: 0; }
+}
+
+@keyframes cyberScan {
+    0% { transform: translateY(-100px); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
+}
+.floating-contact{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    z-index:9999;
+}
+
+.contact-item{
+    position:relative;
+}
+
+.contact-btn{
+    width:65px;
+    height:65px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:white;
+    position:relative;
+    z-index:2;
+}
+
+.contact-btn img{
+    width:34px;
+    height:34px;
+}
+
+/* CẦU VỒNG XUNG QUANH */
+.contact-btn::before{
+    content:"";
+    position:absolute;
+    top:-5px;
+    left:-5px;
+    right:-5px;
+    bottom:-5px;
+    border-radius:50%;
+    background:conic-gradient(
+        red, orange, yellow, green, cyan, blue, violet, red
+    );
+    z-index:-1;
+    animation:rotate 3s linear infinite;
+    filter:blur(6px);
+}
+
+.contact-btn:hover{
+    transform:scale(1.15);
+    transition:0.4s;
+}
+
+.contact-text{
+    position:absolute;
+    right:80px;
+    top:50%;
+    transform:translateY(-50%);
+    background:#111;
+    color:white;
+    padding:8px 14px;
+    border-radius:20px;
+    font-size:14px;
+    opacity:0;
+    transition:0.3s;
+    white-space:nowrap;
+}
+
+.contact-item:hover .contact-text{
+    opacity:1;
+}
+
+@keyframes rotate{
+    0%{transform:rotate(0deg);}
+    100%{transform:rotate(360deg);}
+}
+
+</style>
+
+<div class="floating-contact">
+
+    <!-- ZALO -->
+    <a href="https://zalo.me/0379005818" target="_blank" class="contact-item">
+        <div class="contact-text">Chat Zalo</div>
+        <div class="contact-btn">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg">
+        </div>
+    </a>
+
+    <!-- MESSENGER (FIX LỖI ICON) -->
+    <a href="https://m.me/100073208828272" target="_blank" class="contact-item">
+        <div class="contact-text">Messenger</div>
+        <div class="contact-btn">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968764.png">
+        </div>
+    </a>
+
+    <!-- PHONE -->
+    <a href="tel:0379005818" class="contact-item">
+        <div class="contact-text">Gọi ngay</div>
+        <div class="contact-btn">
+            <img src="https://cdn-icons-png.flaticon.com/512/597/597177.png">
+        </div>
+    </a>
+
+</div>
+<!-- FOOTER CREATIVE PRO -->
+<style>
+.footer{
+    position:relative;
+    background:linear-gradient(-45deg,#0f2027,#203a43,#2c5364,#1c1c1c);
+    background-size:400% 400%;
+    animation:gradientMove 12s ease infinite;
+    color:white;
+    padding:80px 20px 30px;
+    margin-top:120px;
+    overflow:hidden;
+}
+
+/* SÓNG TRÊN FOOTER */
+.footer::before{
+    content:"";
+    position:absolute;
+    top:-60px;
+    left:0;
+    width:100%;
+    height:120px;
+    background:radial-gradient(circle at 50% 100%, rgba(0,255,255,0.4), transparent 70%);
+}
+
+.footer-container{
+    max-width:1200px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:40px;
+}
+
+.footer-box{
+    transition:0.4s;
+}
+
+.footer-box:hover{
+    transform:translateY(-8px);
+}
+
+.footer h3{
+    font-size:18px;
+    margin-bottom:15px;
+    position:relative;
+}
+
+/* GẠCH CHÂN CẦU VỒNG */
+.footer h3::after{
+    content:"";
+    position:absolute;
+    bottom:-5px;
+    left:0;
+    width:60px;
+    height:3px;
+    background:linear-gradient(to right,red,orange,yellow,green,cyan,blue,violet);
+    animation:rainbowMove 4s linear infinite;
+}
+
+.footer p{
+    margin:8px 0;
+    font-size:14px;
+    opacity:0.9;
+    transition:0.3s;
+}
+
+.footer p:hover{
+    color:#00f5ff;
+    transform:translateX(5px);
+}
+
+.footer a{
+    color:#00f5ff;
+    text-decoration:none;
+}
+
+.footer a:hover{
+    text-decoration:underline;
+}
+
+.footer-bottom{
+    text-align:center;
+    margin-top:40px;
+    padding-top:20px;
+    border-top:1px solid rgba(255,255,255,0.2);
+    font-size:13px;
+    opacity:0.7;
+}
+
+/* ANIMATION */
+@keyframes gradientMove{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+@keyframes rainbowMove{
+    0%{filter:hue-rotate(0deg);}
+    100%{filter:hue-rotate(360deg);}
+}
+</style>
+
+<footer class="footer">
+    
+    <div class="footer-container">
+<!-- NÚT ADMIN QUANTUM RGB - PHIÊN BẢN ĐẦU TƯ -->
+<div class="admin-quantum-wrapper">
+    <a href="admin.html" class="quantum-btn">
+        <span class="quantum-border"></span>
+        <div class="quantum-content">
+            <i class="bi bi-terminal-fill"></i>
+            <span>ADMIN</span>
+        </div>
+    </a>
+</div>
+
+
+<style>
+/* Container tinh gọn */
+.admin-quantum-wrapper {
+    padding: 30px 0;
+    display: flex;
+    justify-content: center;
+    background: transparent;
+}
+
+/* Nút bấm Quantum */
+.quantum-btn {
+    position: relative;
+    width: 160px; /* Độ rộng bé, gọn gàng */
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    border-radius: 50px; /* Bo tròn cực mạnh */
+    overflow: hidden; /* Cắt phần gradient thừa bên ngoài */
+    transition: 0.4s;
+    background: #000;
+}
+
+/* Hiệu ứng viền cầu vồng chạy xung quanh */
+.quantum-border {
+    position: absolute;
+    width: 200%; /* Rộng hơn nút để quay */
+    height: 500%;
+    background: conic-gradient(
+        #ff0000, #ff7300, #fffb00, #48ff00, 
+        #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000
+    );
+    animation: rotateRGB 3s linear infinite;
+    z-index: 1;
+}
+
+/* Lớp phủ bên trong để tạo khoảng trống cho viền */
+.quantum-content {
+    position: relative;
+    z-index: 2;
+    width: calc(100% - 4px); /* Tạo viền 2px */
+    height: calc(100% - 4px);
+    background: rgba(10, 10, 10, 0.95); /* Nền đen sâu */
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    transition: 0.3s;
+}
+
+/* Icon & Chữ */
+.quantum-content i {
+    font-size: 14px;
+    background: linear-gradient(45deg, #00f2ff, #00ff88);
+    -webkit-text-fill-color: transparent;
+}
+
+/* Hiệu ứng khi Hover */
+.quantum-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+}
+
+.quantum-btn:hover .quantum-content {
+    background: rgba(255, 255, 255, 0.05); /* Hiện nền nhẹ khi hover */
+    color: #fff;
+}
+
+.quantum-btn:hover .quantum-border {
+    animation-duration: 1s; /* Chạy nhanh hơn khi di chuột vào */
+}
+
+/* Keyframes xoay vòng cầu vồng */
+@keyframes rotateRGB {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+</style>
+
+
+        <div class="footer-box">
+            <h3>📍 Địa chỉ cửa hàng</h3>
+            <p>nhà số 2 ngõ 1</p>
+            <p>Phường quận 2</p>
+            <p>TP. Hồ Chí Minh</p>
+        </div>
+
+        <div class="footer-box">
+            <h3>📞 Liên hệ</h3>
+            <p>Hotline: 0898435621</p>
+            <p>Zalo: <a href="https://zalo.me/">Chat ngay</a></p>
+            <p>Messenger: <a href="https://m.me/yourfacebookid">Nhắn tin</a></p>
+            <p>Email: memmsksmsk@gmail.com</p>
+        </div>
+
+        <div class="footer-box">
+            <h3>👑 Thông tin Admin</h3>
+            <p>Admin: minh Nhật/p>
+            <p>Website Developer: TRAN HOANG BACH</p>
+            <p>Thiết kế & vận hành: 2026</p>
+            <p>Hỗ trợ 24/7</p>
+        </div>
+
+    </div>
+<a href="danh-gia.html" class="btn-danh-gia">
+  <div class="tick-xanh">
+    <i class="fas fa-check"></i>
+  </div>
+  <span>Đánh giá</span>
+</a>
+
+    <div class="footer-bottom">
+        © 2026 MINH NHẬT STORE| All Rights Reserved
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('click', (e) => {
+    for (let i = 0; i < 12; i++) {
+        const p = document.createElement('div');
+        p.className = 'firework-particle';
+        const colors = ['#FFD700', '#FF0000', '#FF4500', '#FFFFFF', '#FF69B4'];
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.left = e.clientX + 'px';
+        p.style.top = e.clientY + 'px';
+        
+        // Tạo hướng nổ ngẫu nhiên
+        const tx = (Math.random() - 0.5) * 200 + 'px';
+        const ty = (Math.random() - 0.5) * 200 + 'px';
+        p.style.setProperty('--tx', tx);
+        p.style.setProperty('--ty', ty);
+        
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 800);
+    }
+});
+function createRedEnvelope() {
+    const envelope = document.createElement('div');
+    envelope.innerHTML = '🧧'; // Icon bao lì xì
+    envelope.style.position = 'fixed';
+    envelope.style.top = '-50px';
+    envelope.style.left = Math.random() * 100 + 'vw';
+    envelope.style.fontSize = Math.random() * 20 + 10 + 'px';
+    envelope.style.zIndex = '9998';
+    envelope.style.userSelect = 'none';
+    envelope.style.cursor = 'default';
+    
+    const duration = Math.random() * 3 + 4 + 's';
+    envelope.style.animation = `fall ${duration} linear forwards`;
+    
+    document.body.appendChild(envelope);
+    setTimeout(() => envelope.remove(), 7000);
+}
+// Tạo bao lì xì mỗi 2 giây
+setInterval(createRedEnvelope, 2000);
+    
+    
+const canvas = document.getElementById("rainCanvas");
+const ctx = canvas.getContext("2d");
+
+function resize(){
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+}
+resize();
+window.addEventListener("resize",resize);
+
+let drops=[];
+for(let i=0;i<90;i++){
+    drops.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        length:Math.random()*20+10,
+        speed:Math.random()*4+4
+    });
+}
+
+function rain(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.strokeStyle="rgba(255,255,255,0.25)";
+    ctx.lineWidth=1;
+
+    drops.forEach(d=>{
+        ctx.beginPath();
+        ctx.moveTo(d.x,d.y);
+        ctx.lineTo(d.x-2,d.y+d.length);
+        ctx.stroke();
+
+        d.y+=d.speed;
+        d.x-=0.5;
+
+        if(d.y>canvas.height){
+            d.y=0;
+            d.x=Math.random()*canvas.width;
+        }
+    });
+
+    requestAnimationFrame(rain);
+}
+rain();
+document.querySelectorAll('.product').forEach(product => {
+  // Đổi từ checkout.html thành payment.html
+  const btn = product.querySelector('a[href="payment.html"]');
+
+  if(btn){
+    btn.addEventListener("click", function(){
+      const name = product.querySelector("h6")?.innerText || "";
+      const price = product.querySelector("p")?.innerText || "";
+
+      const data = {
+        name: name,
+        price: price
+      };
+
+      // Lưu vào localStorage
+      localStorage.setItem("currentProduct", JSON.stringify(data));
+    });
+  }
+});
+</script>
+<script>
+const toggleBtn = document.querySelector(".theme-toggle");
+const themeIcon = document.getElementById("themeIcon");
+
+// Load saved theme
+if(localStorage.getItem("theme")==="light"){
+    document.body.classList.add("light-mode");
+    themeIcon.classList.remove("bi-moon-fill");
+    themeIcon.classList.add("bi-sun-fill");
+}
+
+// Click toggle
+toggleBtn.addEventListener("click",()=>{
+    document.body.classList.toggle("light-mode");
+
+    if(document.body.classList.contains("light-mode")){
+        themeIcon.classList.remove("bi-moon-fill");
+        themeIcon.classList.add("bi-sun-fill");
+        localStorage.setItem("theme","light");
+    }else{
+        themeIcon.classList.remove("bi-sun-fill");
+        themeIcon.classList.add("bi-moon-fill");
+        localStorage.setItem("theme","dark");
+    }
+});
+
+</script>
+<script>
+function logoutUser(){
+    window.location.href = "index.html";
+}
+</script>
+<script>
+        const musicBtn = document.getElementById('music-btn');
+        const audio = document.getElementById('bg-music');
+
+        // Hàm xử lý bật/tắt
+        musicBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                musicBtn.classList.add('playing');
+                musicBtn.classList.remove('paused');
+            } else {
+                audio.pause();
+                musicBtn.classList.add('paused');
+                musicBtn.classList.remove('playing');
+            }
+        });
+
+        // Tự động phát khi người dùng tương tác lần đầu với trang web
+        document.addEventListener('click', () => {
+            if (audio.paused && !musicBtn.classList.contains('paused')) {
+                audio.play();
+            }
+        }, { once: true });
+    </script>
+    <script>
+document.querySelectorAll('.product').forEach(product => {
+
+  const btn = product.querySelector('a[href="checkout.html"]');
+
+  if(btn){
+    btn.addEventListener("click", function(){
+
+      const name = product.querySelector("h6")?.innerText || "";
+      const price = product.querySelector("p")?.innerText || "";
+
+      const data = {
+        name: name,
+        price: price
+      };
+
+      localStorage.setItem("currentProduct", JSON.stringify(data));
+
+    });
+  }
+
+});
+
+</script>
+</body>
+</html>
+
+</body>
+</html><div class="row g-4" id="productList"></div>

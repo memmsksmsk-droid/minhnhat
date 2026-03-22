@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Trần Bách</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root{
+--primary:#00f5ff;
+--secondary:#9333ea;
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:Inter,sans-serif;
+background:radial-gradient(circle at 20% 20%,#1e1b4b,#020617 60%);
+color:white;
+overflow-x:hidden;
+}
+
+/* Galaxy animation */
+body::before{
+content:"";
+position:fixed;
+width:200%;
+height:200%;
+background:radial-gradient(white 1px,transparent 1px);
+background-size:50px 50px;
+opacity:0.05;
+animation:moveStars 60s linear infinite;
+z-index:0;
+}
+@keyframes moveStars{
+from{transform:translate(0,0)}
+to{transform:translate(-500px,-500px)}
+}
+
+/* Rain */
+.rain{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+pointer-events:none;
+z-index:0;
+}
+.drop{
+position:absolute;
+width:2px;
+height:15px;
+background:linear-gradient(transparent,var(--primary));
+animation:rain 1s linear infinite;
+opacity:0.5;
+}
+@keyframes rain{
+0%{transform:translateY(-100px)}
+100%{transform:translateY(100vh)}
+}
+
+.container{
+position:relative;
+z-index:1;
+max-width:600px;
+margin:40px auto;
+padding:20px;
+}
+
+.card{
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(25px);
+border-radius:30px;
+padding:35px;
+box-shadow:0 0 60px rgba(0,245,255,0.3);
+border:1px solid rgba(255,255,255,0.1);
+animation:fade 0.6s ease;
+}
+
+h2{
+text-align:center;
+margin-bottom:20px;
+font-size:26px;
+}
+
+.input{
+width:100%;
+padding:14px;
+border-radius:14px;
+border:1px solid rgba(255,255,255,0.1);
+background:#111827;
+color:white;
+margin-bottom:15px;
+outline:none;
+transition:0.3s;
+}
+.input:focus{
+border-color:var(--primary);
+box-shadow:0 0 15px var(--primary);
+}
+
+.stars{
+display:flex;
+justify-content:center;
+gap:10px;
+margin:20px 0;
+}
+.stars i{
+font-size:32px;
+cursor:pointer;
+color:#374151;
+transition:0.3s;
+}
+.stars i.active{
+color:#facc15;
+text-shadow:0 0 20px #facc15;
+transform:scale(1.3);
+}
+
+button{
+width:100%;
+padding:15px;
+border:none;
+border-radius:18px;
+background:linear-gradient(45deg,var(--primary),var(--secondary));
+color:white;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+}
+button:hover{
+transform:translateY(-3px);
+box-shadow:0 15px 40px rgba(0,245,255,0.5);
+}
+
+.review{
+margin-top:30px;
+}
+
+.review-item{
+background:rgba(255,255,255,0.05);
+padding:20px;
+border-radius:20px;
+margin-bottom:15px;
+border:1px solid rgba(255,255,255,0.1);
+animation:fade 0.5s ease;
+}
+
+.review-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.user{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.avatar{
+width:42px;
+height:42px;
+border-radius:50%;
+background:linear-gradient(45deg,var(--primary),var(--secondary));
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+}
+
+.verified{
+color:#1d9bf0;
+margin-left:6px;
+}
+
+.vip{
+font-size:11px;
+background:gold;
+color:black;
+padding:2px 6px;
+border-radius:8px;
+margin-left:6px;
+animation:glow 1.5s infinite alternate;
+}
+@keyframes glow{
+from{box-shadow:0 0 5px gold}
+to{box-shadow:0 0 15px gold}
+}
+
+.delete{
+display:none;
+color:#ef4444;
+cursor:pointer;
+}
+.admin-mode .delete{display:block;}
+
+.stats{
+text-align:center;
+margin-top:15px;
+font-size:14px;
+color:#cbd5e1;
+}
+
+.admin-btn{
+text-align:center;
+margin-top:10px;
+font-size:13px;
+cursor:pointer;
+color:#94a3b8;
+}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(10px)}
+to{opacity:1;transform:translateY(0)}
+}
+/* ===== NÚT HOME PRO ===== */
+.home-btn{
+position:fixed;
+top:25px;
+left:25px;
+display:flex;
+align-items:center;
+gap:10px;
+padding:12px 20px;
+border-radius:40px;
+background:linear-gradient(45deg,#00f5ff,#9333ea,#ff00aa);
+color:white;
+font-weight:bold;
+text-decoration:none;
+box-shadow:0 0 20px rgba(0,245,255,0.6);
+z-index:999;
+transition:0.4s;
+backdrop-filter:blur(10px);
+}
+
+.home-btn i{
+font-size:18px;
+}
+
+.home-btn:hover{
+transform:scale(1.1);
+box-shadow:0 0 35px #00f5ff,0 0 50px #9333ea;
+background:linear-gradient(45deg,#9333ea,#00f5ff,#ff00aa);
+}
+</style>
+</head>
+
+<body>
+
+<div class="rain" id="rain"></div>
+<a href="home.html" class="home-btn">
+<i class="fa-solid fa-house"></i>
+<span>Trang chủ</span>
+</a>
+<div class="container">
+
+<div class="card">
+<h2>👑 Admin Trần Bách</h2>
+
+<input type="text" id="name" class="input" placeholder="Tên của bạn...">
+<textarea id="msg" class="input" rows="3" placeholder="Cảm nhận của bạn..."></textarea>
+
+<div class="stars" id="stars">
+<i class="fa-solid fa-star" data-v="1"></i>
+<i class="fa-solid fa-star" data-v="2"></i>
+<i class="fa-solid fa-star" data-v="3"></i>
+<i class="fa-solid fa-star" data-v="4"></i>
+<i class="fa-solid fa-star" data-v="5"></i>
+</div>
+
+<button onclick="addReview()">ĐĂNG ĐÁNH GIÁ</button>
+
+<div class="stats" id="stats"></div>
+<div class="admin-btn" onclick="toggleAdmin()">🔒 Chế độ Admin</div>
+</div>
+
+<div class="review" id="reviewList"></div>
+
+</div>
+
+<script>
+/* Rain */
+function createRain(){
+const rain=document.getElementById("rain");
+for(let i=0;i<120;i++){
+let drop=document.createElement("div");
+drop.className="drop";
+drop.style.left=Math.random()*100+"%";
+drop.style.animationDuration=(0.5+Math.random())+"s";
+drop.style.opacity=Math.random();
+rain.appendChild(drop);
+}
+}
+createRain();
+
+let rating=5;
+let isAdmin=false;
+const ADMIN_PASS="123456";
+
+const stars=document.querySelectorAll("#stars i");
+
+function updateStars(){
+stars.forEach(s=>{
+s.classList.toggle("active", s.dataset.v <= rating);
+});
+}
+updateStars();
+
+stars.forEach(s=>{
+s.onclick=()=>{
+rating=Number(s.dataset.v);
+updateStars();
+playClick();
+}
+});
+
+function playClick(){
+const audio=new Audio("https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg");
+audio.volume=0.2;
+audio.play();
+}
+
+function addReview(){
+const name=document.getElementById("name").value.trim();
+const msg=document.getElementById("msg").value.trim();
+if(!name||!msg)return alert("Nhập đủ thông tin!");
+
+let db=JSON.parse(localStorage.getItem("galaxy_reviews")||"[]");
+
+db.unshift({
+id:Date.now(),
+name,
+msg,
+rating,
+time:new Date().toLocaleString("vi-VN")
+});
+
+localStorage.setItem("galaxy_reviews",JSON.stringify(db));
+document.getElementById("name").value="";
+document.getElementById("msg").value="";
+rating=5;
+updateStars();
+render();
+}
+
+function deleteReview(id){
+let db=JSON.parse(localStorage.getItem("galaxy_reviews")||"[]");
+db=db.filter(r=>r.id!==id);
+localStorage.setItem("galaxy_reviews",JSON.stringify(db));
+render();
+}
+
+function toggleAdmin(){
+if(isAdmin){
+isAdmin=false;
+document.body.classList.remove("admin-mode");
+alert("Đã thoát Admin");
+}else{
+const pass=prompt("Nhập mật khẩu Admin:");
+if(pass===ADMIN_PASS){
+isAdmin=true;
+document.body.classList.add("admin-mode");
+alert("Admin Mode Activated");
+}else alert("Sai mật khẩu!");
+}
+}
+
+function render(){
+let db=JSON.parse(localStorage.getItem("galaxy_reviews")||"[]");
+let list=document.getElementById("reviewList");
+list.innerHTML="";
+let total=0;
+
+db.forEach(r=>{
+total+=r.rating;
+list.innerHTML+=`
+<div class="review-item">
+<div class="review-top">
+<div class="user">
+<div class="avatar">${r.name.charAt(0).toUpperCase()}</div>
+<div>
+<div>
+${r.name}
+<i class="fa-solid fa-circle-check verified"></i>
+${r.rating==5?'<span class="vip">VIP</span>':''}
+</div>
+<div style="font-size:11px;color:#94a3b8">${r.time}</div>
+</div>
+</div>
+<div class="delete" onclick="deleteReview(${r.id})">
+<i class="fa-solid fa-trash"></i>
+</div>
+</div>
+<div style="color:#facc15;margin:8px 0">
+${'<i class="fa-solid fa-star"></i>'.repeat(r.rating)}
+</div>
+<div style="color:#cbd5e1">${r.msg}</div>
+</div>
+`;
+});
+
+const avg=db.length?(total/db.length).toFixed(1):0;
+document.getElementById("stats").innerHTML=
+`⭐ Trung bình: <b>${avg}</b> | 📝 ${db.length} đánh giá`;
+}
+
+render();
+</script>
+
+</body>
+</html>

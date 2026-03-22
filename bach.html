@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>ADMIN GOD MODE - Trần Bách</title>
+
+<style>
+body{
+margin:0;
+height:100vh;
+background:black;
+display:flex;
+justify-content:center;
+align-items:center;
+font-family:Segoe UI, sans-serif;
+color:white;
+overflow:hidden;
+}
+
+/* Canvas nền */
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:0;
+}
+
+/* Card */
+.card{
+position:relative;
+width:600px;
+padding:50px;
+border-radius:35px;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(30px);
+text-align:center;
+z-index:2;
+border:2px solid rgba(0,255,255,0.5);
+box-shadow:0 0 100px cyan;
+transition:0.3s ease;
+}
+
+.card:hover{
+transform:scale(1.03);
+box-shadow:0 0 120px #00ffff;
+}
+
+.avatar{
+width:180px;
+height:180px;
+border-radius:50%;
+border:5px solid white;
+object-fit:cover;
+box-shadow:0 0 50px #1877f2;
+margin-bottom:20px;
+}
+
+.name{
+font-size:36px;
+font-weight:bold;
+display:flex;
+justify-content:center;
+align-items:center;
+gap:12px;
+}
+
+.verify{
+width:30px;
+height:30px;
+background:#1877f2;
+border-radius:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+color:white;
+font-size:18px;
+font-weight:bold;
+border:3px solid white;
+box-shadow:0 0 30px #1877f2;
+animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+from{box-shadow:0 0 10px #1877f2;}
+to{box-shadow:0 0 40px #00ffff;}
+}
+
+.vip{
+color:gold;
+font-size:20px;
+margin-bottom:20px;
+}
+
+.info{
+margin-top:20px;
+background:rgba(255,255,255,0.12);
+padding:25px;
+border-radius:20px;
+text-align:left;
+line-height:2;
+font-size:16px;
+}
+
+.info span{
+color:#00ffff;
+font-weight:bold;
+}
+
+button{
+padding:6px 15px;
+border:none;
+border-radius:20px;
+background:#00ffff;
+color:black;
+font-weight:bold;
+cursor:pointer;
+margin-left:10px;
+transition:0.2s;
+}
+
+button:hover{
+transform:scale(1.1);
+box-shadow:0 0 15px cyan;
+}
+
+.counter{
+margin-top:25px;
+font-size:18px;
+color:#00ffcc;
+}
+
+.music-btn{
+position:absolute;
+top:20px;
+right:20px;
+background:#1877f2;
+border:none;
+color:white;
+padding:8px 15px;
+border-radius:20px;
+cursor:pointer;
+}
+
+.btn-back{
+display:inline-block;
+margin-top:30px;
+padding:12px 40px;
+border-radius:30px;
+background:#1877f2;
+color:white;
+text-decoration:none;
+font-weight:bold;
+box-shadow:0 0 30px #1877f2;
+transition:0.3s;
+}
+
+.btn-back:hover{
+transform:scale(1.1);
+box-shadow:0 0 50px cyan;
+}
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<div class="card">
+
+<button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵 Nhạc</button>
+
+<img src="z7575849532825_4e2b69bb6af09023669f3145af18ada1.jpg" class="avatar">
+
+<div class="name">
+👑 MINH NHẬT
+<div class="verify">✓</div>
+</div>
+
+<div class="vip">WED CỦA ADMIN MINH NhậT 
+
+<div class="info">
+📱 <span>SĐT:</span> 0898435621 
+<button onclick="copyText('0379005818')">Copy</button><br>
+
+🏠 <span>Địa chỉ:</span> HÀ NỘI <br>
+
+💳 <span>ZaloPay:</span> 0898435621 
+<button onclick="copyText('0123456789')">Copy</button><br>
+
+💰 <span>PayPal:</span> 
+<a href="https://www.paypal.me/ThuongHoang354" target="_blank" style="color:#00ffff;font-weight:bold;">
+paypal.me/ThuongHoang354
+</a><br>
+
+🏦 <span>Ngân hàng:</span> Mbbank : 1077362808
+<button onclick="copyText('123456789')">Copy</button>
+</div>
+
+<div class="counter">
+🔥 Đã có <b id="counter">0</b> người ủng hộ admin
+</div>
+
+
+<a href="home.html" class="btn-back">⬅ Quay lại trang chính</a>
+
+</div>
+
+<audio id="bgmusic" loop>
+<source src="tiktok_audio.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+function copyText(text){
+navigator.clipboard.writeText(text);
+alert("Đã sao chép: "+text);
+}
+
+/* Counter mượt */
+let count=0,target=500;
+let counter=document.getElementById("counter");
+function animateCounter(){
+if(count<target){
+count+=2;
+counter.innerText=count;
+requestAnimationFrame(animateCounter);
+}
+}
+animateCounter();
+
+/* Nhạc */
+function toggleMusic(){
+let music=document.getElementById("bgmusic");
+let btn=document.getElementById("musicBtn");
+if(music.paused){
+music.play();
+btn.innerText="⏸ Dừng";
+}else{
+music.pause();
+btn.innerText="🎵 Nhạc";
+}
+}
+
+/* Nền sao */
+const canvas=document.getElementById("stars");
+const ctx=canvas.getContext("2d");
+
+function resize(){
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+}
+window.addEventListener("resize",resize);
+resize();
+
+let stars=[];
+for(let i=0;i<200;i++){
+stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2});
+}
+
+function draw(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle="white";
+stars.forEach(s=>{
+ctx.beginPath();
+ctx.arc(s.x,s.y,s.r,0,2*Math.PI);
+ctx.fill();
+s.y+=0.4;
+if(s.y>canvas.height) s.y=0;
+});
+requestAnimationFrame(draw);
+}
+draw();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh toán thành công</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+        body{ min-height:100vh; background:linear-gradient(135deg,#0f2027,#203a43,#2c5364); display:flex; justify-content:center; align-items:center; color:white; overflow:hidden; }
+        canvas{ position:fixed; top:0; left:0; z-index:-1; }
+        .bill-card{ width:450px; background:rgba(255,255,255,0.1); backdrop-filter:blur(15px); padding:40px; border-radius:20px; text-align:center; box-shadow:0 20px 40px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
+        .icon-success{ font-size:60px; color:#4bb543; margin-bottom:10px; }
+        h2{ margin-bottom:20px; color:#00c6ff; }
+        .bill-details{ text-align:left; background:rgba(0,0,0,0.2); padding:20px; border-radius:12px; margin-bottom:25px; line-height:2.2; }
+        .line{ display:flex; justify-content:space-between; border-bottom:1px dashed rgba(255,255,255,0.1); }
+        .btn-home{ display:inline-block; width:100%; padding:12px; background:linear-gradient(45deg,#00c6ff,#0072ff); color:white; text-decoration:none; border-radius:25px; font-weight:600; transition:0.3s; }
+        .btn-home:hover{ box-shadow:0 0 20px #00c6ff; transform:translateY(-2px); }
+    </style>
+</head>
+<body>
+<canvas id="rain"></canvas>
+<div class="bill-card">
+    <div class="icon-success">✔</div>
+    <h2>Đã gửi yêu cầu!</h2>
+    <div class="bill-details" id="billContent">
+        </div>
+    <a href="home.html" class="btn-home">Quay về trang chủ</a>
+</div>
+
+<script>
+    const product = JSON.parse(localStorage.getItem("currentProduct"));
+    const billContent = document.getElementById("billContent");
+
+    if(product) {
+        // 1. Hiển thị lên màn hình
+        billContent.innerHTML = `
+            <div class="line"><span>Sản phẩm:</span> <b>${product.name}</b></div>
+            <div class="line"><span>Người chuyển:</span> <b>${product.payerName}</b></div>
+            <div class="line"><span>Số tiền:</span> <b style="color:#00ffd5">${product.price}</b></div>
+            <div class="line"><span>Thời gian:</span> <b>${product.date}</b></div>
+            <div class="line"><span>Trạng thái:</span> <b style="color:#ffcc00">Đang chờ duyệt</b></div>
+        `;
+
+        // 2. Lưu đơn hàng vào danh sách chung cho Admin (orders)
+        let orders = JSON.parse(localStorage.getItem("orders")) || [];
+        
+        // Tạo đơn hàng mới để Admin đọc
+        const newOrder = {
+            id: Date.now(), // Tạo ID ngẫu nhiên bằng thời gian
+            product: product.name,
+            client: product.payerName,
+            bank: product.bankName,
+            total: product.price,
+            date: product.date,
+            status: "Chờ duyệt"
+        };
+
+        // Đẩy đơn vào mảng và lưu lại
+        orders.push(newOrder);
+        localStorage.setItem("orders", JSON.stringify(orders));
+        
+        // Xóa sản phẩm tạm sau khi đã đặt xong để tránh trùng
+        localStorage.removeItem("currentProduct");
+    } else {
+        billContent.innerHTML = "<p style='color:#ff4b2b'>⚠️ Không tìm thấy dữ liệu đơn hàng.</p>";
+    }
+
+    /* Hiệu ứng mưa (Giữ nguyên) */
+    const canvas = document.getElementById("rain");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    let drops=[];
+    for(let i=0;i<150;i++){ drops.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,l:15,s:5}); }
+    function rain(){
+        ctx.clearRect(0,0,canvas.width,canvas.height); ctx.strokeStyle="rgba(255,255,255,0.2)";
+        drops.forEach(d=>{ ctx.beginPath(); ctx.moveTo(d.x,d.y); ctx.lineTo(d.x-2,d.y+d.l); ctx.stroke(); d.y+=d.s; if(d.y>canvas.height)d.y=0; });
+        requestAnimationFrame(rain);
+    }
+    rain();
+</script>
+</body>
+</html>

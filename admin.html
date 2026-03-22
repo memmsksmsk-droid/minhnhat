@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRẦN BÁCH | MULTICOLOR COMMANDER</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Plus+Jakarta+Sans:wght@300;800&display=swap');
+
+        :root {
+            --c1: #00f2ff; --c2: #7000ff; --c3: #ff00c8; --c4: #ffee00; --c5: #00ff88;
+            --bg: #05070a;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.15);
+            --fb-blue: #1877F2;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: var(--bg); color: #fff; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            overflow: hidden; height: 100vh;
+        }
+
+        /* --- TÍCH XANH FB STYLE --- */
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--fb-blue);
+            color: white;
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            font-size: 9px;
+            margin-left: 8px;
+            box-shadow: 0 0 10px var(--fb-blue);
+            vertical-align: middle;
+        }
+
+        /* --- NỀN MÀU CHUYỂN ĐỘNG --- */
+        .bg-glow {
+            position: fixed; inset: 0; z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 242, 255, 0.15), transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255, 0, 200, 0.15), transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(112, 0, 255, 0.1), transparent 50%);
+            animation: flow 10s ease infinite alternate;
+        }
+        @keyframes flow { from { transform: scale(1); } to { transform: scale(1.2); } }
+
+        /* TÍNH NĂNG MỚI: HIỆU ỨNG RADAR SCAN */
+        .radar-line {
+            position: fixed; top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--c1), transparent);
+            opacity: 0.1; z-index: 9999; pointer-events: none;
+            animation: scan 4s linear infinite;
+        }
+        @keyframes scan { 0% { top: 0; } 100% { top: 100vh; } }
+
+        /* --- LOGIN CARD --- */
+        #authLayer {
+            position: fixed; inset: 0; z-index: 10000;
+            display: flex; justify-content: center; align-items: center;
+            background: var(--bg);
+        }
+        .login-card {
+            width: 450px; padding: 50px; border-radius: 30px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid var(--border);
+            backdrop-filter: blur(20px); text-align: center;
+            box-shadow: 0 0 50px rgba(0,0,0,1), 0 0 20px var(--c1);
+            position: relative;
+        }
+        .login-card::before {
+            content: ''; position: absolute; inset: -5px; border-radius: 35px;
+            background: linear-gradient(45deg, var(--c1), var(--c2), var(--c3), var(--c5));
+            z-index: -1; filter: blur(15px); opacity: 0.6;
+            animation: rotateBg 4s linear infinite;
+        }
+        @keyframes rotateBg { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
+
+        .input-box {
+            width: 100%; padding: 18px; margin-bottom: 20px;
+            background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+            border-radius: 12px; color: #fff; font-family: 'Orbitron';
+            outline: none; transition: 0.3s;
+        }
+        .input-box:focus { border-color: var(--c1); box-shadow: 0 0 15px var(--c1); }
+
+        .btn-login {
+            width: 100%; padding: 20px; border-radius: 12px; border: none;
+            background: linear-gradient(90deg, var(--c1), var(--c2));
+            color: #fff; font-family: 'Orbitron'; font-weight: 900;
+            cursor: pointer; text-transform: uppercase; letter-spacing: 2px;
+        }
+
+        /* --- LOADING --- */
+        #loadingCinema {
+            position: fixed; inset: 0; z-index: 11000; background: #000;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .rainbow-ring {
+            width: 200px; height: 200px; border-radius: 50%;
+            border: 8px solid transparent;
+            border-top-color: var(--c1); border-right-color: var(--c3); border-bottom-color: var(--c5);
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* --- DASHBOARD --- */
+        #mainDashboard { display: none; height: 100vh; grid-template-columns: 280px 1fr; opacity: 0; transition: 1s; }
+        .sidebar {
+            background: rgba(0, 0, 0, 0.4); border-right: 1px solid var(--border);
+            backdrop-filter: blur(10px); padding: 40px 20px;
+        }
+        .nav-item {
+            padding: 15px 20px; border-radius: 15px; margin-bottom: 10px;
+            cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 15px;
+            font-weight: 800; color: #94a3b8; border: 1px solid transparent;
+        }
+        .nav-item:hover, .nav-item.active {
+            background: var(--glass); color: #fff;
+            border-color: var(--c1); box-shadow: 0 0 15px rgba(0,242,255,0.2);
+        }
+
+        .content { padding: 40px; overflow-y: auto; background: rgba(0,0,0,0.2); }
+
+        /* THỐNG KÊ */
+        .grid-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-bottom: 40px; }
+        .stat-card {
+            padding: 30px; border-radius: 25px; background: var(--glass);
+            border: 1px solid var(--border); position: relative; overflow: hidden;
+        }
+        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; }
+        .card-cyan::before { background: var(--c1); }
+        .card-pink::before { background: var(--c3); }
+        .card-gold::before { background: var(--c4); }
+
+        /* TÍNH NĂNG MỚI: TERMINAL LOG STYLE */
+        .terminal-box {
+            background: rgba(0,0,0,0.6); border: 1px solid var(--border);
+            border-radius: 15px; padding: 20px; font-family: 'monospace';
+            font-size: 12px; color: var(--c5); height: 150px; overflow-y: auto;
+            margin-top: 20px; box-shadow: inset 0 0 20px rgba(0,255,136,0.1);
+        }
+
+        /* BIỂU ĐỒ */
+        .game-chart {
+            height: 150px; display: flex; align-items: flex-end; gap: 8px;
+            border-bottom: 2px solid var(--border); padding-bottom: 5px;
+        }
+        .bar { 
+            flex: 1; border-radius: 4px 4px 0 0; 
+            animation: grow 1s ease-out forwards;
+            background: linear-gradient(to top, var(--c1), var(--c2));
+        }
+        @keyframes grow { from { height: 0; } to { height: var(--h); } }
+
+        /* BẢNG */
+        table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
+        th { text-align: left; padding: 15px; color: var(--c1); font-family: 'Orbitron'; font-size: 11px; }
+        td { padding: 15px; background: rgba(255,255,255,0.03); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        
+        .btn-action {
+            padding: 8px 15px; border-radius: 8px; border: none; cursor: pointer;
+            font-weight: 800; font-size: 10px; text-transform: uppercase;
+        }
+        .btn-edit { background: var(--c1); color: #000; }
+        .btn-del { background: var(--c3); color: #fff; }
+
+        #toast {
+            position: fixed; bottom: 30px; right: 30px; padding: 15px 30px;
+            background: var(--c5); color: #000; border-radius: 12px;
+            font-weight: 900; font-family: 'Orbitron'; z-index: 20000; display: none;
+        }
+
+        /* TÍNH NĂNG MỚI: PRIVACY BLUR */
+        .privacy-active .hide-private {
+            filter: blur(8px);
+            pointer-events: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body id="bodyRoot">
+
+<div class="bg-glow"></div>
+<div class="radar-line"></div>
+<div id="toast">THÀNH CÔNG</div>
+
+<div id="authLayer">
+    <div class="login-card">
+        <h2 style="font-family:'Orbitron'; margin-bottom:30px; letter-spacing:3px">COMMANDER 1 </h2>
+        <input type="text" id="user" class="input-box" placeholder="MẬT DANH">
+        <input type="password" id="pass" class="input-box" placeholder="MÃ BẢO MẬT">
+        <button class="btn-login" onclick="login()">KÍCH HOẠT HỆ THỐNG</button>
+    </div>
+</div>
+
+<div id="loadingCinema">
+    <div class="rainbow-ring"></div>
+    <div style="margin-top:40px; text-align:center">
+        <h1 id="welcome" style="font-family:'Orbitron'; font-size:35px; letter-spacing:10px; color:#fff">XÁC MINH DANH TÍNH...</h1>
+        <p style="color:var(--c1); font-weight:900; margin-top:10px">WELCOME BACK, TRẦN BÁCH</p>
+    </div>
+</div>
+
+<main id="mainDashboard">
+    <aside class="sidebar">
+        <div style="text-align: center; margin-bottom: 50px;">
+            <img src="https://i.imgur.com/6VBx3io.png" style="width: 100px; border-radius: 50%; border: 2px solid var(--c1); padding: 5px;">
+            <h2 style="margin-top:15px; font-family:'Orbitron'">
+                TRẦN BÁCH <span class="verified-badge"><i class="fas fa-check"></i></span>
+            </h2>
+            <div style="font-size:10px; color:var(--c1); font-weight:900">LEVEL 999 COMMANDER</div>
+        </div>
+
+        <div class="nav-item active" onclick="showTab('core', this)"><i class="fas fa-bolt"></i> TRUNG TÂM LÕI</div>
+        <div class="nav-item" onclick="showTab('money', this)"><i class="fas fa-coins"></i> DOANH THU</div>
+        <div class="nav-item" onclick="showTab('users', this)"><i class="fas fa-users"></i> NGƯỜI DÙNG</div>
+        <div class="nav-item" onclick="showTab('orders', this)"><i class="fas fa-box-open"></i> ĐƠN HÀNG</div>
+        
+        <div class="nav-item" onclick="togglePrivacy()" style="margin-top:20px; border:1px dashed var(--c1)">
+            <i class="fas fa-eye-slash"></i> CHẾ ĐỘ ẨN DANH
+        </div>
+
+        <div class="nav-item" onclick="location.reload()" style="margin-top:auto; color:var(--c3)">
+            <i class="fas fa-power-off"></i> THOÁT HỆ THỐNG
+        </div>
+    </aside>
+
+    <section class="content">
+        <div id="tab-core" class="tab-pane">
+            <h1 style="font-family:'Orbitron'; margin-bottom:30px">SYSTEM OVERVIEW</h1>
+            <div class="grid-stats">
+                <div class="stat-card card-cyan">
+                    <p style="color:var(--c1)">TỔNG ĐƠN HÀNG</p>
+                    <h2 id="s-orders" class="hide-private" style="font-size:40px; font-family:'Orbitron'">0</h2>
+                </div>
+                <div class="stat-card card-pink">
+                    <p style="color:var(--c3)">THÀNH VIÊN</p>
+                    <h2 id="s-users" class="hide-private" style="font-size:40px; font-family:'Orbitron'">0</h2>
+                </div>
+                <div class="stat-card card-gold">
+                    <p style="color:var(--c4)">DOANH THU THỰC (VNĐ)</p>
+                    <h2 id="s-money" class="hide-private" style="font-size:30px; font-family:'Orbitron'">0</h2>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="stat-card">
+                    <h3 style="margin-bottom:20px; font-family:'Orbitron'">LƯU LƯỢNG TRUY CẬP</h3>
+                    <div class="game-chart" id="chart"></div>
+                </div>
+                <div class="stat-card">
+                    <h3 style="margin-bottom:20px; font-family:'Orbitron'">NHẬT KÝ LÕI (SYSTEM LOG)</h3>
+                    <div class="terminal-box" id="terminal">
+                        [SYSTEM] Khởi động hệ thống...<br>
+                        [AUTH] Đang chờ xác minh Commander...<br>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-money" class="tab-pane" style="display:none">
+            <h1 style="font-family:'Orbitron'; margin-bottom:30px">FINANCIAL DATA</h1>
+            <div class="stat-card">
+                <h3>TIẾN ĐỘ MỤC TIÊU (10.000.000đ)</h3>
+                <div style="height:35px; background:rgba(0,0,0,0.5); border-radius:20px; margin:25px 0; overflow:hidden; border:1px solid var(--border)">
+                    <div id="progress" style="height:100%; background:linear-gradient(90deg, var(--c1), var(--c5)); width:0%; transition:2s ease-in-out; box-shadow: 0 0 20px var(--c1)"></div>
+                </div>
+                <p id="targetMsg" style="font-weight:800; color:var(--c1)">Đang tính toán từ các đơn thành công...</p>
+            </div>
+            <div class="stat-card" style="margin-top:20px">
+                <h3 style="margin-bottom:15px">CHI TIẾT DÒNG TIỀN THÀNH CÔNG</h3>
+                <div id="moneyLogs" class="hide-private" style="font-family:Orbitron; font-size:12px"></div>
+            </div>
+        </div>
+
+        <div id="tab-users" class="tab-pane" style="display:none">
+            <div class="stat-card">
+                <h2 style="font-family:'Orbitron'; margin-bottom:20px">QUẢN LÝ TÀI KHOẢN</h2>
+                <table>
+                    <thead><tr><th>EMAIL</th><th>MẬT KHẨU</th><th>HÀNH ĐỘNG</th></tr></thead>
+                    <tbody id="userList" class="hide-private"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab-orders" class="tab-pane" style="display:none">
+            <div class="stat-card">
+                <h2 style="font-family:'Orbitron'; margin-bottom:20px">DANH SÁCH VẬN ĐƠN</h2>
+                <table>
+                    <thead><tr><th>KHÁCH HÀNG</th><th>DỊCH VỤ</th><th>TRẠNG THÁI</th><th>LƯU</th></tr></thead>
+                    <tbody id="orderList" class="hide-private"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+    // TÍNH NĂNG MỚI: Ghi log terminal
+    function addLog(msg) {
+        const term = document.getElementById('terminal');
+        const time = new Date().toLocaleTimeString();
+        term.innerHTML += `[${time}] ${msg}<br>`;
+        term.scrollTop = term.scrollHeight;
+    }
+
+    // TÍNH NĂNG MỚI: Bật/Tắt ẩn danh
+    function togglePrivacy() {
+        document.getElementById('bodyRoot').classList.toggle('privacy-active');
+        const isActive = document.getElementById('bodyRoot').classList.contains('privacy-active');
+        notify(isActive ? "ĐÃ BẬT CHẾ ĐỘ ẨN DANH" : "ĐÃ TẮT CHẾ ĐỘ ẨN DANH");
+        addLog(isActive ? "PRIVACY MODE: ENABLED" : "PRIVACY MODE: DISABLED");
+    }
+
+    function login() {
+        const u = document.getElementById('user').value;
+        const p = document.getElementById('pass').value;
+        if(u === "admin" && p === "123456") {
+            document.getElementById('authLayer').style.display = 'none';
+            const cinema = document.getElementById('loadingCinema');
+            cinema.style.display = 'flex';
+            
+            addLog("Đang giải mã dữ liệu...");
+            setTimeout(() => { document.getElementById('welcome').innerText = "ACCESS GRANTED"; addLog("Quyền truy cập: COMMANDER LEVEL 999"); }, 2000);
+            setTimeout(() => { document.getElementById('welcome').innerText = "BOOTING LÕI..."; addLog("Đang tải cơ sở dữ liệu..."); }, 4000);
+            
+            setTimeout(() => {
+                cinema.style.opacity = '0';
+                setTimeout(() => {
+                    cinema.style.display = 'none';
+                    const main = document.getElementById('mainDashboard');
+                    main.style.display = 'grid';
+                    setTimeout(() => { main.style.opacity = '1'; refreshData(); }, 100);
+                    notify("HỆ THỐNG ĐÃ SẴN SÀNG, COMMANDER!");
+                    addLog("Hệ thống online. Chào mừng Trần Bách.");
+                }, 1000);
+            }, 6000);
+        } else { 
+            notify("❌ SAI MÃ TRUY CẬP!"); 
+            addLog("CẢNH BÁO: Cố gắng truy cập trái phép!");
+        }
+    }
+
+    function refreshData() {
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        const orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+        document.getElementById('s-users').innerText = users.length;
+        document.getElementById('s-orders').innerText = orders.length;
+
+        let totalMoney = 0;
+        let logHTML = "";
+        
+        orders.forEach(o => { 
+            if(o.status === "Thành công") {
+                let val = parseInt(o.total) || 0;
+                totalMoney += val;
+                logHTML += `<div style="padding:10px; border-bottom:1px solid rgba(255,255,255,0.05); display:flex; justify-content:space-between">
+                                <span>${o.client} - ${o.product}</span>
+                                <span style="color:var(--c5)">+${val.toLocaleString()}đ</span>
+                            </div>`;
+            }
+        });
+
+        document.getElementById('s-money').innerText = totalMoney.toLocaleString();
+        document.getElementById('moneyLogs').innerHTML = logHTML || "Chưa có giao dịch hoàn tất.";
+
+        const percent = Math.min((totalMoney / 10000000) * 100, 100);
+        document.getElementById('progress').style.width = percent + "%";
+        document.getElementById('targetMsg').innerText = `COMMANDER đã đạt ${percent.toFixed(1)}% mục tiêu doanh thu tháng (10M).`;
+
+        const chart = document.getElementById('chart');
+        chart.innerHTML = "";
+        for(let i=0; i<15; i++) {
+            const h = Math.random() * 80 + 20;
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            bar.style.setProperty('--h', h + "%");
+            chart.appendChild(bar);
+        }
+
+        document.getElementById('userList').innerHTML = users.map((u, i) => `
+            <tr>
+                <td style="color:var(--c1)">${u.email}</td>
+                <td><input type="text" value="${atob(u.pass)}" id="pw-${i}" style="background:none; border:none; color:#fff; font-family:Orbitron; width:100px"></td>
+                <td>
+                    <button class="btn-action btn-edit" onclick="updatePass(${i})">LƯU</button>
+                    <button class="btn-action btn-del" onclick="deleteUser(${i})">XÓA</button>
+                </td>
+            </tr>
+        `).join("");
+
+        document.getElementById('orderList').innerHTML = orders.map((o, i) => `
+            <tr>
+                <td>${o.client || 'GUEST'}</td>
+                <td>${o.product}</td>
+                <td>
+                    <select id="st-${i}" style="background:#000; color:#fff; border:1px solid var(--c1); padding:5px; border-radius:5px">
+                        <option value="Chờ duyệt" ${o.status==='Chờ duyệt'?'selected':''}>Chờ duyệt</option>
+                        <option value="Đang giao" ${o.status==='Đang giao'?'selected':''}>Đang giao</option>
+                        <option value="Thành công" ${o.status==='Thành công'?'selected':''}>Thành công</option>
+                    </select>
+                </td>
+                <td><button class="btn-action btn-edit" onclick="updateOrder(${i})">SYNC</button></td>
+            </tr>
+        `).join("");
+    }
+
+    function updatePass(idx) {
+        let users = JSON.parse(localStorage.getItem("users"));
+        users[idx].pass = btoa(document.getElementById(`pw-${idx}`).value);
+        localStorage.setItem("users", JSON.stringify(users));
+        notify("ĐÃ CẬP NHẬT MẬT KHẨU");
+        addLog(`Cập nhật mật khẩu người dùng: ${users[idx].email}`);
+    }
+
+    function deleteUser(idx) {
+        if(confirm("Xóa vĩnh viễn người dùng này?")) {
+            let users = JSON.parse(localStorage.getItem("users"));
+            addLog(`Đã xóa người dùng: ${users[idx].email}`);
+            users.splice(idx, 1);
+            localStorage.setItem("users", JSON.stringify(users));
+            refreshData();
+            notify("ĐÃ XÓA NGƯỜI DÙNG");
+        }
+    }
+
+    function updateOrder(idx) {
+        let orders = JSON.parse(localStorage.getItem("orders"));
+        orders[idx].status = document.getElementById(`st-${idx}`).value;
+        localStorage.setItem("orders", JSON.stringify(orders));
+        refreshData();
+        notify("ĐÃ ĐỒNG BỘ DOANH THU THỰC");
+        addLog(`Cập nhật trạng thái đơn: ${orders[idx].product} -> ${orders[idx].status}`);
+    }
+
+    function showTab(id, el) {
+        document.querySelectorAll('.tab-pane').forEach(p => p.style.display = 'none');
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById('tab-' + id).style.display = 'block';
+        el.classList.add('active');
+        addLog(`Truy cập phân vùng: ${id.toUpperCase()}`);
+    }
+
+    function notify(msg) {
+        const t = document.getElementById('toast');
+        t.innerText = msg; t.style.display = 'block';
+        setTimeout(() => { t.style.display = 'none'; }, 3000);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BACH TƯ VẤN | ULTIMATE OFFLINE BOT</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;800&display=swap');
+
+:root{
+--primary:#00f2fe;
+--secondary:#4facfe;
+--bg:linear-gradient(135deg,#0f172a,#1e293b,#020617);
+--glass:rgba(255,255,255,0.06);
+--border:rgba(255,255,255,0.15);
+}
+
+body,html{
+margin:0;padding:0;height:100%;
+font-family:'Plus Jakarta Sans',sans-serif;
+background:var(--bg);
+color:#fff;
+overflow:hidden;
+}
+
+#canvas-bg{position:fixed;inset:0;z-index:-1}
+
+.container{
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+#selector{text-align:center}
+.cards-wrapper{display:flex;gap:50px;margin-top:40px}
+
+.staff-card{
+width:250px;
+padding:50px 20px;
+background:var(--glass);
+backdrop-filter:blur(20px);
+border:1px solid var(--border);
+border-radius:40px;
+cursor:pointer;
+transition:.4s;
+}
+.staff-card:hover{
+transform:translateY(-15px);
+border-color:var(--primary);
+}
+
+.img-circle{
+width:120px;height:120px;
+border-radius:50%;
+margin:0 auto 25px;
+background-size:cover;
+background-position:center;
+border:4px solid var(--border);
+}
+
+#chat-ui{
+width:460px;
+height:85vh;
+background:rgba(10,15,30,.85);
+backdrop-filter:blur(30px);
+border-radius:45px;
+border:1px solid var(--border);
+display:none;
+flex-direction:column;
+}
+
+.chat-header{
+padding:25px;
+display:flex;
+align-items:center;
+gap:15px;
+border-bottom:1px solid var(--border);
+}
+
+.avatar-header{
+width:50px;height:50px;border-radius:50%;
+background-size:cover;
+border:2px solid #2ecc71;
+}
+
+.chat-body{
+flex:1;
+padding:20px;
+overflow-y:auto;
+display:flex;
+flex-direction:column;
+gap:15px;
+}
+
+.msg-row{max-width:85%}
+.msg-row.user{align-self:flex-end;text-align:right}
+
+.msg-text{
+padding:12px 18px;
+border-radius:20px;
+font-size:14px;
+}
+
+.bot .msg-text{
+background:var(--glass);
+border:1px solid var(--border);
+}
+
+.user .msg-text{
+background:linear-gradient(135deg,var(--primary),var(--secondary));
+color:#000;
+font-weight:600;
+}
+
+.timestamp{
+font-size:10px;
+opacity:.4;
+margin-top:3px;
+}
+
+.input-bar{
+padding:20px;
+display:flex;
+gap:10px;
+border-top:1px solid var(--border);
+}
+
+input{
+flex:1;
+background:rgba(255,255,255,.05);
+border:1px solid var(--border);
+padding:12px 15px;
+border-radius:20px;
+color:#fff;
+outline:none;
+}
+
+.send-btn{
+background:#fff;
+border:none;
+width:45px;height:45px;
+border-radius:15px;
+cursor:pointer;
+}
+/* ===== HOME BUTTON ULTRA ===== */
+.home-btn{
+position:fixed;
+top:25px;
+left:25px;
+display:flex;
+align-items:center;
+gap:10px;
+padding:12px 20px;
+border-radius:40px;
+background:linear-gradient(45deg,#00f2fe,#4facfe,#9333ea);
+color:#fff;
+font-weight:700;
+text-decoration:none;
+z-index:999;
+box-shadow:0 0 25px rgba(0,242,254,0.7);
+transition:0.4s;
+backdrop-filter:blur(10px);
+}
+
+.home-btn:hover{
+transform:scale(1.12);
+box-shadow:
+0 0 30px #00f2fe,
+0 0 50px #9333ea;
+}
+
+.home-btn i{
+font-size:18px;
+}
+</style>
+</head>
+
+<body>
+    <a href="home.html" class="home-btn">
+<i class="fa-solid fa-house"></i>
+<span>Trang chủ</span>
+</a>
+
+<canvas id="canvas-bg"></canvas>
+
+<div class="container">
+
+<div id="selector">
+<h1>TRẦN BÁCH <span style="color:#00f2fe">VIP</span></h1>
+<p>Hệ thống trợ lý tư vấn size thông minh</p>
+
+<div class="cards-wrapper">
+
+<div class="staff-card" onclick="startChat('nam')">
+<div class="img-circle" style="background-image:url('https://cdn-media.sforum.vn/storage/app/media/quynh/meme-meo-khoc-7.jpg')"></div>
+<h3 style="color:#00f2fe">Mr. Quân</h3>
+</div>
+
+<div class="staff-card" onclick="startChat('nu')">
+<div class="img-circle" style="background-image:url('https://cdn-media.sforum.vn/storage/app/media/quynh/meme-meo-khoc-5.jpg')"></div>
+<h3 style="color:#00f2fe">Ms. Linh</h3>
+</div>
+
+</div>
+</div>
+
+<div id="chat-ui">
+
+<div class="chat-header">
+<div id="header-img" class="avatar-header"></div>
+<div>
+<b id="header-name"></b><br>
+<small style="color:#2ecc71;font-size:11px">● TRỰC TUYẾN</small>
+</div>
+<button onclick="location.reload()" style="margin-left:auto;background:none;border:none;color:#94a3b8">
+<i class="fas fa-times-circle"></i>
+</button>
+</div>
+
+<div class="chat-body" id="chatBox"></div>
+
+<div class="input-bar">
+<input type="text" id="userInput" placeholder="Nhập cân nặng hoặc chiều cao...">
+<button class="send-btn" onclick="handleSend()">
+<i class="fas fa-paper-plane"></i>
+</button>
+</div>
+
+</div>
+</div>
+
+<script>
+// ================= NỀN HIỆU ỨNG =================
+const canvas=document.getElementById('canvas-bg');
+const ctx=canvas.getContext('2d');
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+for(let i=0;i<120;i++){
+particles.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*2,
+d:Math.random()*1
+});
+}
+
+function draw(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle="rgba(255,255,255,0.15)";
+particles.forEach(p=>{
+ctx.beginPath();
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+ctx.fill();
+p.y-=p.d;
+if(p.y<0)p.y=canvas.height;
+});
+requestAnimationFrame(draw);
+}
+draw();
+
+
+// ================= BOT LOGIC =================
+
+let currentBot="";
+let customerInfo={weight:null,height:null,style:null};
+
+function normalize(str){
+return str.normalize("NFD")
+.replace(/[\u0300-\u036f]/g,"")
+.toLowerCase();
+}
+
+function startChat(type){
+currentBot=type;
+customerInfo={weight:null,height:null,style:null};
+
+document.getElementById('selector').style.display='none';
+document.getElementById('chat-ui').style.display='flex';
+document.getElementById('chatBox').innerHTML="";
+
+const name= type==='nam'?"Mr. Quân":"Ms. Linh";
+const avatar= type==='nam'
+?'https://cdn-media.sforum.vn/storage/app/media/quynh/meme-meo-khoc-7.jpg'
+:'https://cdn-media.sforum.vn/storage/app/media/quynh/meme-meo-khoc-5.jpg';
+
+document.getElementById('header-name').innerText=name;
+document.getElementById('header-img').style.backgroundImage=`url(${avatar})`;
+
+if(type==="nam"){
+addMessage('bot',"Chào anh 👔 Quân hỗ trợ tư vấn size đây ạ! Anh cho em xin cân nặng và chiều cao nhé.");
+}else{
+addMessage('bot',"Linh chào mình ✨ Cho Linh xin cân nặng và chiều cao để tư vấn chuẩn xinh nha.");
+}
+}
+
+function addMessage(type,text){
+const box=document.getElementById('chatBox');
+const time=new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+
+box.innerHTML+=`
+<div class="msg-row ${type}">
+<div class="msg-text">${text}</div>
+<div class="timestamp">${time}</div>
+</div>`;
+
+box.scrollTop=box.scrollHeight;
+}
+
+function handleSend(){
+
+const input=document.getElementById('userInput');
+const text=input.value.trim();
+
+if(!text) return;
+
+addMessage('user',text);
+input.value="";
+
+addMessage('bot',"Đang nhập...");
+
+setTimeout(()=>{
+
+const box=document.getElementById('chatBox');
+box.lastChild.remove();
+
+addMessage('bot',getReply(text));
+
+},800);
+
+}
+// ================= TRÍ TUỆ BOT =================
+
+function extractInfo(text){
+const clean=normalize(text);
+
+// bắt cân nặng
+let weightMatch=clean.match(/(\d+)\s?(kg|ky|kilo|ki|kí)/);
+if(weightMatch){
+customerInfo.weight=parseInt(weightMatch[1]);
+}
+
+// bắt chiều cao 1m72 / 1.72 / 172cm
+let heightMatch=clean.match(/1[\.,]?\d{1,2}/);
+if(heightMatch){
+let h=heightMatch[0].replace(",",".");
+if(h.length===4 && !h.includes(".")){
+h=h.slice(0,1)+"."+h.slice(1);
+}
+customerInfo.height=parseFloat(h);
+}
+
+let cmMatch=clean.match(/(\d{3})\s?cm/);
+if(cmMatch){
+customerInfo.height=parseInt(cmMatch[1])/100;
+}
+
+// bắt style
+if(clean.includes("rong")||clean.includes("oversize")){
+customerInfo.style="rong";
+}
+if(clean.includes("om")||clean.includes("body")||clean.includes("slim")){
+customerInfo.style="om";
+}
+if(clean.includes("gym")){
+customerInfo.style="gym";
+}
+}
+
+function calculateSize(weight,height,style){
+let base;
+
+if(weight<=48) base="S";
+else if(weight<=58) base="M";
+else if(weight<=68) base="L";
+else if(weight<=78) base="XL";
+else base="XXL";
+
+// chỉnh theo chiều cao
+if(height){
+if(height>=1.75 && base==="M") base="L";
+if(height>=1.8 && base==="L") base="XL";
+}
+
+// chỉnh theo style
+if(style==="rong"||style==="gym") return nextSize(base);
+if(style==="om") return prevSize(base);
+
+return base;
+}
+
+function nextSize(size){
+const arr=["S","M","L","XL","XXL"];
+let i=arr.indexOf(size);
+return arr[i+1]||size;
+}
+
+function prevSize(size){
+const arr=["S","M","L","XL","XXL"];
+let i=arr.indexOf(size);
+return arr[i-1]||size;
+}
+
+function getReply(text){
+    
+    // hỏi đổi hàng
+if(clean.includes("doi") || clean.includes("size khong vua")){
+return "Nếu size không vừa anh/chị có thể đổi trong 3 ngày 👍 Shop hỗ trợ đổi size miễn phí.";
+}
+
+// hỏi giao hàng
+if(clean.includes("ship") || clean.includes("giao hang")){
+return "Shop giao toàn quốc 🚚 Thời gian 2-4 ngày tùy khu vực.";
+}
+
+// hỏi chất liệu
+if(clean.includes("vai") || clean.includes("chat lieu")){
+return "Áo dùng vải cotton cao cấp 👕 thoáng mát, co giãn nhẹ và mặc rất thoải mái.";
+}
+
+// hỏi màu
+if(clean.includes("mau")){
+return "Hiện shop có nhiều màu khác nhau 🎨 Anh/chị muốn xem màu nào để em gửi ảnh nhé.";
+}
+
+extractInfo(text);
+const clean=normalize(text);
+// ===== CHÀO HỎI =====
+if(clean.includes("hello") || clean.includes("chao") || clean.includes("hi")){
+return currentBot==="nam"
+?"Chào anh 👋 Quân hỗ trợ anh chọn size và sản phẩm nhé!"
+:"Linh xin chào ✨ Linh giúp mình chọn size và mẫu đẹp nha.";
+}
+
+// ===== HỎI SHOP =====
+if(clean.includes("shop o dau") || clean.includes("dia chi")){
+return "Shop hiện bán online toàn quốc 🌎 Anh/chị đặt hàng sẽ được giao tận nhà.";
+}
+
+// ===== HỎI SẢN PHẨM =====
+if(clean.includes("ao") || clean.includes("quan")){
+return "Shop hiện có nhiều mẫu áo và quần mới 🔥 Anh/chị muốn form rộng hay form ôm?";
+}
+
+// ===== HỎI GIÁ =====
+if(clean.includes("gia") || clean.includes("bao nhieu")){
+return "Giá sản phẩm dao động khoảng 199k - 459k 💰 tùy mẫu. Anh/chị muốn xem mẫu nào để em báo giá chính xác nhé.";
+}
+
+// ===== HỎI SHIP =====
+if(clean.includes("ship") || clean.includes("giao hang")){
+return "Shop giao hàng toàn quốc 🚚 Thời gian từ 2-4 ngày tùy khu vực.";
+}
+
+// ===== HỎI ĐỔI HÀNG =====
+if(clean.includes("doi hang") || clean.includes("doi size")){
+return "Nếu mặc không vừa shop hỗ trợ đổi size trong 3 ngày 👍";
+}
+
+// ===== HỎI CHẤT LIỆU =====
+if(clean.includes("vai") || clean.includes("chat lieu")){
+return "Áo được làm từ cotton cao cấp 👕 mềm, thoáng và co giãn nhẹ.";
+}
+
+// ===== HỎI SIZE =====
+if(clean.includes("size")){
+return "Anh/chị gửi cân nặng và chiều cao nhé 📏 ví dụ: 65kg 1m72";
+}
+
+// hỏi form
+if(clean.includes("form")){
+return currentBot==="nam"
+?"Form bên anh là form chuẩn nam 👔 không quá ôm. Muốn rộng hơn anh tăng 1 size nhé."
+:"Form bên em là form tôn dáng nhẹ ✨. Nếu mình thích rộng có thể tăng 1 size nha.";
+}
+
+// hỏi giá
+if(clean.includes("gia")||clean.includes("bao nhieu")){
+return "Sản phẩm đang có giá ưu đãi 🔥 Anh/chị cho em xin mẫu cụ thể để em báo chính xác nha.";
+}
+
+// đủ info
+if(customerInfo.weight && customerInfo.height){
+
+let size=calculateSize(customerInfo.weight,customerInfo.height,customerInfo.style);
+
+if(currentBot==="nam"){
+return `Với ${customerInfo.weight}kg cao ${customerInfo.height}m 👔
+
+➜ Quân đề xuất size ${size}
+
+Mặc sẽ ${customerInfo.style==="om"?"ôm body tôn cơ 💪":customerInfo.style==="rong"?"rộng thoải mái street style 🔥":"vừa form nam tính chuẩn chỉnh 👌"}
+
+Anh muốn mặc rộng thêm hay vừa chuẩn để em chỉnh tiếp nhé.`;
+}else{
+return `Với ${customerInfo.weight}kg cao ${customerInfo.height}m ✨
+
+➜ Linh đề xuất size ${size}
+
+Mặc sẽ ${customerInfo.style==="om"?"ôm nhẹ tôn dáng 💕":customerInfo.style==="rong"?"rộng xinh kiểu Hàn 🌸":"vừa đẹp thanh lịch 👗"}
+
+Mình thích mặc rộng hay ôm để Linh tư vấn kỹ thêm nha 💖`;
+}
+}
+
+// thiếu info
+if(customerInfo.weight && !customerInfo.height){
+return `Anh/chị ${customerInfo.weight}kg rồi 👍 Cho em xin thêm chiều cao (vd: 1m72) để tư vấn chuẩn hơn nhé.`;
+}
+
+if(customerInfo.height && !customerInfo.weight){
+return `Anh/chị cao ${customerInfo.height}m rồi 👍 Cho em xin thêm cân nặng (vd: 60kg) để chọn size chính xác nhé.`;
+}
+
+return currentBot==="nam"
+?"Anh thử nhập như: 65kg 1m72 hoặc 65kg mặc rộng 👔\n\nQuân sẽ tính size chuẩn cho anh."
+:"Mình thử nhập: 52kg 1m6 hoặc 52kg mặc ôm nha ✨\n\nLinh sẽ chọn size đẹp nhất cho mình.";
+}
+
+document.getElementById('userInput').addEventListener('keypress',e=>{
+if(e.key==='Enter') handleSend();
+});
+const clean = text.toLowerCase();
+</script>
+
+
+</body>
+</html>

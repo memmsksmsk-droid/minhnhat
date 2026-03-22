@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>PROFILE COMMANDER - GIA DIỄN</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .profile-container {
+            max-width: 500px; margin: 100px auto;
+            background: rgba(255,255,255,0.05);
+            padding: 40px; border-radius: 20px;
+            border: 1px solid #00f2ff;
+            backdrop-filter: blur(20px); box-shadow: 0 0 50px rgba(0,242,255,0.2);
+        }
+        input {
+            width: 100%; padding: 12px; margin: 10px 0;
+            background: rgba(0,0,0,0.5); border: 1px solid #333;
+            color: #00f2ff; border-radius: 8px;
+        }
+        .btn-change {
+            width: 100%; padding: 12px; background: #00f2ff;
+            color: #000; font-weight: bold; border: none;
+            border-radius: 8px; cursor: pointer; transition: 0.3s;
+        }
+        .btn-change:hover { box-shadow: 0 0 20px #00f2ff; transform: scale(1.02); }
+    </style>
+</head>
+<body style="background: #050505;">
+    <div class="profile-container">
+        <h2 style="color: #00f2ff; text-align: center; font-family: 'Orbitron';">ĐỔI MẬT KHẨU</h2>
+        <p style="text-align: center; color: #888;">Tài khoản: <span id="user-email" style="color: #fff;"></span></p>
+        
+        <input type="password" id="oldPass" placeholder="Mật khẩu hiện tại">
+        <input type="password" id="newPass" placeholder="Mật khẩu mới">
+        <button class="btn-change" onclick="changePassword()">CẬP NHẬT MẬT KHẨU</button>
+        <br><br>
+        <a href="home.html" style="color: #ff0055; text-decoration: none;">← Quay lại trang chủ</a>
+    </div>
+
+    <script>
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        document.getElementById('user-email').innerText = currentUser.email;
+
+        function changePassword() {
+            const oldP = document.getElementById('oldPass').value;
+            const newP = document.getElementById('newPass').value;
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            
+            // Tìm user và cập nhật
+            let userIdx = users.findIndex(u => u.email === currentUser.email);
+            
+            if(newP.length < 6) {
+                alert("Mật khẩu mới phải từ 6 ký tự!");
+                return;
+            }
+
+            users[userIdx].pass = btoa(newP); // Mã hóa đơn giản như index.html
+            localStorage.setItem('users', JSON.stringify(users));
+            alert("Đổi mật khẩu thành công! Vui lòng đăng nhập lại.");
+            localStorage.removeItem('currentUser');
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>
